@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { supabase } from '../../lib/supabase';
 
 interface Shul {
   id: string;
@@ -32,6 +33,7 @@ export default function ShulCommunity() {
   ]);
 
   const [showForm, setShowForm] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     address: '',
@@ -39,12 +41,37 @@ export default function ShulCommunity() {
     contactEmail: '',
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Submit to backend
-    alert('Shul submission received! We will review and add it to the community.');
-    setShowForm(false);
-    setFormData({ name: '', address: '', website: '', contactEmail: '' });
+    setIsSubmitting(true);
+
+    try {
+      const { data, error } = await supabase
+        .from('shuls')
+        .insert([
+          {
+            name: formData.name,
+            address: formData.address,
+            website: formData.website || null,
+            contact_email: formData.contactEmail,
+            approved: false, // New submissions need approval
+          },
+        ]);
+
+      if (error) {
+        throw error;
+      }
+
+      alert('Shul submission received! We will review and add it to the community.');
+      setShowForm(false);
+      setFormData({ name: '', address: '', website: '', contactEmail: '' });
+    } catch (error: unknown) {
+      console.error('Error submitting shul:', error);
+      const message = error instanceof Error ? error.message : JSON.stringify(error, null, 2);
+      alert(`Error submitting shul: ${message}`);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -120,9 +147,10 @@ export default function ShulCommunity() {
               </div>
               <button
                 type="submit"
-                className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md"
+                disabled={isSubmitting}
+                className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Submit Shul
+                {isSubmitting ? 'Submitting...' : 'Submit Shul'}
               </button>
             </form>
           </div>
