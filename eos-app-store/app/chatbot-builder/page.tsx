@@ -1,4 +1,7 @@
+'use client';
+
 import { useState } from 'react';
+import { supabase } from '../../lib/supabase';
 
 export default function ChatbotBuilder() {
   const [formData, setFormData] = useState({
@@ -9,16 +12,50 @@ export default function ChatbotBuilder() {
     trainingData: '',
     contactEmail: '',
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Submit form data to backend
-    console.log('Form submitted:', formData);
-    alert('Chatbot creation request submitted! We will contact you soon.');
+    setIsSubmitting(true);
+
+    try {
+      const { data, error } = await supabase
+        .from('chatbot_submissions')
+        .insert([
+          {
+            business_name: formData.businessName,
+            business_type: formData.businessType,
+            chatbot_purpose: formData.chatbotPurpose,
+            api_endpoints: formData.apiEndpoints || null,
+            training_data: formData.trainingData,
+            contact_email: formData.contactEmail,
+          },
+        ]);
+
+      if (error) {
+        throw error;
+      }
+
+      alert('Chatbot creation request submitted successfully! We will contact you soon.');
+      setFormData({
+        businessName: '',
+        businessType: '',
+        chatbotPurpose: '',
+        apiEndpoints: '',
+        trainingData: '',
+        contactEmail: '',
+      });
+    } catch (error: unknown) {
+      console.error('Error submitting form:', error);
+      const message = error instanceof Error ? error.message : JSON.stringify(error, null, 2);
+      alert(`Error submitting form: ${message}`);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -136,9 +173,10 @@ export default function ChatbotBuilder() {
           <div>
             <button
               type="submit"
-              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              disabled={isSubmitting}
+              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Create Chatbot
+              {isSubmitting ? 'Submitting...' : 'Create Chatbot'}
             </button>
           </div>
         </form>
