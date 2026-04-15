@@ -247,6 +247,70 @@ export type Database = {
           view_mode?: 'professional' | 'personal' | 'both'
         }
       }
+      kosher_launcher_profiles: {
+        Row: {
+          id: string
+          created_at: string
+          updated_at: string
+          owner_github_id: number
+          owner_login: string
+          profile_name: string
+          platform: 'android' | 'ios' | 'shared'
+          strict_mode: boolean
+          install_code: string | null
+        }
+        Insert: {
+          id?: string
+          created_at?: string
+          updated_at?: string
+          owner_github_id: number
+          owner_login: string
+          profile_name?: string
+          platform?: 'android' | 'ios' | 'shared'
+          strict_mode?: boolean
+          install_code?: string | null
+        }
+        Update: {
+          id?: string
+          created_at?: string
+          updated_at?: string
+          owner_github_id?: number
+          owner_login?: string
+          profile_name?: string
+          platform?: 'android' | 'ios' | 'shared'
+          strict_mode?: boolean
+          install_code?: string | null
+        }
+      }
+      kosher_launcher_apps: {
+        Row: {
+          id: string
+          created_at: string
+          profile_id: string
+          app_name: string
+          app_id: string | null
+          category: string
+          is_enabled: boolean
+        }
+        Insert: {
+          id?: string
+          created_at?: string
+          profile_id: string
+          app_name: string
+          app_id?: string | null
+          category?: string
+          is_enabled?: boolean
+        }
+        Update: {
+          id?: string
+          created_at?: string
+          profile_id?: string
+          app_name?: string
+          app_id?: string | null
+          category?: string
+          is_enabled?: boolean
+        }
+      }
     }
   }
 }
