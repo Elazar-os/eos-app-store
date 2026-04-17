@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { supabase } from '../../lib/supabase';
 
 type ChatbotSubmission = {
@@ -26,15 +27,27 @@ type Shul = {
 };
 
 export default function DashboardPage() {
+  const router = useRouter();
   const [tab, setTab] = useState<'submissions' | 'shuls'>('submissions');
   const [submissions, setSubmissions] = useState<ChatbotSubmission[]>([]);
   const [shuls, setShuls] = useState<Shul[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isAuthorized, setIsAuthorized] = useState(false);
 
   useEffect(() => {
+    const hasToken = document.cookie
+      .split(';')
+      .some((cookie) => cookie.trim().startsWith('github_access_token='));
+
+    if (!hasToken) {
+      router.replace('/auth/login?from=/dashboard');
+      return;
+    }
+
+    setIsAuthorized(true);
     fetchData();
-  }, []);
+  }, [router]);
 
   const fetchData = async () => {
     setLoading(true);
@@ -66,6 +79,7 @@ export default function DashboardPage() {
   };
 
   return (
+    !isAuthorized ? null :
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
