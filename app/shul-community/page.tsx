@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { supabase } from '../../lib/supabase';
+import AppShell from '../components/AppShell';
 
 interface Shul {
   id: string;
@@ -75,15 +76,19 @@ export default function ShulCommunity() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto">
+    <AppShell
+      title="Shul Community"
+      description="Submit and browse community shul information, contact details, and recurring schedules."
+      badge="Community"
+    >
+      <div className="mx-auto max-w-6xl">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-3xl font-bold">
             Shul Community App
           </h1>
           <button
             onClick={() => setShowForm(!showForm)}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
+            className="rounded-xl bg-[color:var(--brand)] px-4 py-2 text-sm font-semibold text-white"
           >
             {showForm ? 'Cancel' : 'Add Shul'}
           </button>
@@ -91,14 +96,14 @@ export default function ShulCommunity() {
 
         {/* Add Shul Form */}
         {showForm && (
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+          <div className="surface-strong mb-8 p-6">
+            <h2 className="mb-4 text-xl font-semibold">
               Submit Shul Information
             </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="mb-1 block text-sm font-medium">
                     Shul Name
                   </label>
                   <input
@@ -106,11 +111,11 @@ export default function ShulCommunity() {
                     required
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    className="w-full rounded-xl border border-black/10 bg-white/85 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[color:var(--brand)]"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="mb-1 block text-sm font-medium">
                     Address
                   </label>
                   <input
@@ -118,22 +123,22 @@ export default function ShulCommunity() {
                     required
                     value={formData.address}
                     onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    className="w-full rounded-xl border border-black/10 bg-white/85 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[color:var(--brand)]"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="mb-1 block text-sm font-medium">
                     Website
                   </label>
                   <input
                     type="url"
                     value={formData.website}
                     onChange={(e) => setFormData({ ...formData, website: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    className="w-full rounded-xl border border-black/10 bg-white/85 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[color:var(--brand)]"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="mb-1 block text-sm font-medium">
                     Contact Email
                   </label>
                   <input
@@ -141,14 +146,14 @@ export default function ShulCommunity() {
                     required
                     value={formData.contactEmail}
                     onChange={(e) => setFormData({ ...formData, contactEmail: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    className="w-full rounded-xl border border-black/10 bg-white/85 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[color:var(--brand)]"
                   />
                 </div>
               </div>
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+                className="rounded-xl bg-[color:var(--brand)] px-6 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {isSubmitting ? 'Submitting...' : 'Submit Shul'}
               </button>
@@ -159,26 +164,26 @@ export default function ShulCommunity() {
         {/* Shuls List */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {shuls.map(shul => (
-            <div key={shul.id} className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+            <div key={shul.id} className="surface-strong p-6">
+              <h3 className="mb-2 text-xl font-semibold">
                 {shul.name}
               </h3>
-              <p className="text-gray-600 dark:text-gray-400 mb-4">{shul.address}</p>
+              <p className="muted mb-4">{shul.address}</p>
 
               {shul.website && (
                 <a
                   href={shul.website}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 dark:text-blue-400 hover:underline mb-4 block"
+                  className="mb-4 block font-medium text-[color:var(--brand)] hover:underline"
                 >
                   Visit Website
                 </a>
               )}
 
               <div className="mb-4">
-                <h4 className="font-medium text-gray-900 dark:text-white mb-2">Zmanim</h4>
-                <div className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                <h4 className="mb-2 font-medium">Zmanim</h4>
+                <div className="muted space-y-1 text-sm">
                   <p>Shacharis: {shul.zmanim.shacharis}</p>
                   <p>Mincha: {shul.zmanim.mincha}</p>
                   <p>Maariv: {shul.zmanim.maariv}</p>
@@ -186,8 +191,8 @@ export default function ShulCommunity() {
               </div>
 
               <div>
-                <h4 className="font-medium text-gray-900 dark:text-white mb-2">Shiurim</h4>
-                <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                <h4 className="mb-2 font-medium">Shiurim</h4>
+                <ul className="muted space-y-1 text-sm">
                   {shul.shiurim.map((shiur, index) => (
                     <li key={index}>• {shiur}</li>
                   ))}
@@ -195,10 +200,10 @@ export default function ShulCommunity() {
               </div>
 
               <div className="mt-4 flex space-x-2">
-                <button className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                <button className="rounded-lg bg-[color:var(--brand)] px-3 py-1 text-sm text-white">
                   CarPlay Mode
                 </button>
-                <button className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm">
+                <button className="rounded-lg border border-black/10 bg-white/85 px-3 py-1 text-sm">
                   View Calendar
                 </button>
               </div>
@@ -206,6 +211,6 @@ export default function ShulCommunity() {
           ))}
         </div>
       </div>
-    </div>
+    </AppShell>
   );
 }

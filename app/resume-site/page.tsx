@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import AppShell from '../components/AppShell';
 
 interface ResumeData {
   personal: {
@@ -74,57 +75,61 @@ export default function ResumeSite() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
-      <div className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+    <AppShell
+      title="Resume Builder"
+      description="Craft a polished resume profile and quickly share professional or personal views."
+      badge="Career"
+    >
+      <div className="mx-auto max-w-4xl">
         {/* Header */}
-        <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 mb-6">
+        <div className="surface-strong mb-6 p-6">
           <div className="flex justify-between items-center mb-4">
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Resume Builder</h1>
+            <h1 className="text-3xl font-bold">Resume Builder</h1>
             <button
               onClick={() => setIsEditing(!isEditing)}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
+              className="rounded-xl bg-[color:var(--brand)] px-4 py-2 text-sm font-semibold text-white"
             >
               {isEditing ? 'Save' : 'Edit'}
             </button>
           </div>
 
-          <div className="flex space-x-4 mb-4">
+          <div className="mb-4 flex flex-wrap gap-3">
             <button
               onClick={() => setViewMode('professional')}
-              className={`px-4 py-2 rounded-md ${
-                viewMode === 'professional' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'
+              className={`rounded-full px-4 py-2 text-sm font-medium ${
+                viewMode === 'professional' ? 'bg-[color:var(--brand)] text-white' : 'bg-white/80 text-black'
               }`}
             >
               Professional
             </button>
             <button
               onClick={() => setViewMode('personal')}
-              className={`px-4 py-2 rounded-md ${
-                viewMode === 'personal' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'
+              className={`rounded-full px-4 py-2 text-sm font-medium ${
+                viewMode === 'personal' ? 'bg-[color:var(--brand)] text-white' : 'bg-white/80 text-black'
               }`}
             >
               Personal
             </button>
             <button
               onClick={() => setViewMode('both')}
-              className={`px-4 py-2 rounded-md ${
-                viewMode === 'both' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'
+              className={`rounded-full px-4 py-2 text-sm font-medium ${
+                viewMode === 'both' ? 'bg-[color:var(--brand)] text-white' : 'bg-white/80 text-black'
               }`}
             >
               Both
             </button>
           </div>
 
-          <div className="flex space-x-4">
+          <div className="flex flex-wrap gap-3">
             <button
               onClick={() => shareResume('professional')}
-              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md"
+              className="rounded-xl bg-[color:var(--brand)] px-4 py-2 text-sm font-semibold text-white"
             >
               Share Professional
             </button>
             <button
               onClick={() => shareResume('personal')}
-              className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md"
+              className="rounded-xl border border-black/10 bg-white/85 px-4 py-2 text-sm font-semibold"
             >
               Share Personal
             </button>
@@ -132,23 +137,23 @@ export default function ResumeSite() {
         </div>
 
         {/* Resume Content */}
-        <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-8">
+        <div className="surface-strong p-8">
           {/* Personal Info */}
           <div className="mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+            <h2 className="mb-4 text-2xl font-bold">
               {isEditing ? (
                 <input
                   type="text"
                   value={resumeData.personal.name}
                   onChange={(e) => handlePersonalChange('name', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  className="w-full rounded-xl border border-black/10 bg-white/85 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[color:var(--brand)]"
                 />
               ) : (
                 resumeData.personal.name
               )}
             </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-600 dark:text-gray-400">
+            <div className="muted grid grid-cols-1 gap-4 md:grid-cols-2">
               <div>
                 <strong>Email:</strong>{' '}
                 {isEditing ? (
@@ -156,7 +161,7 @@ export default function ResumeSite() {
                     type="email"
                     value={resumeData.personal.email}
                     onChange={(e) => handlePersonalChange('email', e.target.value)}
-                    className="px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    className="rounded-lg border border-black/10 bg-white/85 px-2 py-1 focus:outline-none"
                   />
                 ) : (
                   resumeData.personal.email
@@ -169,7 +174,7 @@ export default function ResumeSite() {
                     type="tel"
                     value={resumeData.personal.phone}
                     onChange={(e) => handlePersonalChange('phone', e.target.value)}
-                    className="px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    className="rounded-lg border border-black/10 bg-white/85 px-2 py-1 focus:outline-none"
                   />
                 ) : (
                   resumeData.personal.phone
@@ -182,7 +187,7 @@ export default function ResumeSite() {
                     type="text"
                     value={resumeData.personal.location}
                     onChange={(e) => handlePersonalChange('location', e.target.value)}
-                    className="px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    className="rounded-lg border border-black/10 bg-white/85 px-2 py-1 focus:outline-none"
                   />
                 ) : (
                   resumeData.personal.location
@@ -195,7 +200,7 @@ export default function ResumeSite() {
                     type="text"
                     value={resumeData.personal.linkedin}
                     onChange={(e) => handlePersonalChange('linkedin', e.target.value)}
-                    className="px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    className="rounded-lg border border-black/10 bg-white/85 px-2 py-1 focus:outline-none"
                   />
                 ) : (
                   resumeData.personal.linkedin
@@ -210,10 +215,10 @@ export default function ResumeSite() {
                   value={resumeData.personal.summary}
                   onChange={(e) => handlePersonalChange('summary', e.target.value)}
                   rows={3}
-                  className="w-full mt-2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  className="mt-2 w-full rounded-xl border border-black/10 bg-white/85 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[color:var(--brand)]"
                 />
               ) : (
-                <p className="mt-2 text-gray-600 dark:text-gray-400">{resumeData.personal.summary}</p>
+                <p className="muted mt-2">{resumeData.personal.summary}</p>
               )}
             </div>
           </div>
@@ -221,12 +226,12 @@ export default function ResumeSite() {
           {/* Experience */}
           {(viewMode === 'professional' || viewMode === 'both') && (
             <div className="mb-8">
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Experience</h3>
+              <h3 className="mb-4 text-xl font-semibold">Experience</h3>
               {resumeData.experience.map(exp => (
-                <div key={exp.id} className="mb-4 pb-4 border-b border-gray-200 dark:border-gray-600">
-                  <h4 className="font-medium text-gray-900 dark:text-white">{exp.title}</h4>
-                  <p className="text-gray-600 dark:text-gray-400">{exp.company} • {exp.period}</p>
-                  <p className="mt-2 text-gray-600 dark:text-gray-400">{exp.description}</p>
+                <div key={exp.id} className="mb-4 border-b border-black/10 pb-4">
+                  <h4 className="font-medium">{exp.title}</h4>
+                  <p className="muted">{exp.company} • {exp.period}</p>
+                  <p className="muted mt-2">{exp.description}</p>
                 </div>
               ))}
             </div>
@@ -235,11 +240,11 @@ export default function ResumeSite() {
           {/* Education */}
           {(viewMode === 'professional' || viewMode === 'both') && (
             <div className="mb-8">
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Education</h3>
+              <h3 className="mb-4 text-xl font-semibold">Education</h3>
               {resumeData.education.map(edu => (
                 <div key={edu.id} className="mb-2">
-                  <h4 className="font-medium text-gray-900 dark:text-white">{edu.degree}</h4>
-                  <p className="text-gray-600 dark:text-gray-400">{edu.school} • {edu.year}</p>
+                  <h4 className="font-medium">{edu.degree}</h4>
+                  <p className="muted">{edu.school} • {edu.year}</p>
                 </div>
               ))}
             </div>
@@ -248,10 +253,10 @@ export default function ResumeSite() {
           {/* Skills */}
           {(viewMode === 'professional' || viewMode === 'both') && (
             <div className="mb-8">
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Skills</h3>
+              <h3 className="mb-4 text-xl font-semibold">Skills</h3>
               <div className="flex flex-wrap gap-2">
                 {resumeData.skills.map(skill => (
-                  <span key={skill} className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm">
+                  <span key={skill} className="rounded-full bg-[color:var(--brand-soft)] px-3 py-1 text-sm text-[color:var(--brand)]">
                     {skill}
                   </span>
                 ))}
@@ -262,14 +267,14 @@ export default function ResumeSite() {
           {/* Personal Section */}
           {(viewMode === 'personal' || viewMode === 'both') && (
             <div>
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Personal</h3>
-              <p className="text-gray-600 dark:text-gray-400">
+              <h3 className="mb-4 text-xl font-semibold">Personal</h3>
+              <p className="muted">
                 This section can include personal interests, hobbies, and other non-professional information.
               </p>
             </div>
           )}
         </div>
       </div>
-    </div>
+    </AppShell>
   );
 }
