@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import AppShell from '../components/AppShell';
 
 interface Photo {
   id: string;
@@ -13,6 +14,12 @@ export default function PhotoSelector() {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [useCase, setUseCase] = useState<'business' | 'personal' | 'dating'>('business');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      photos.forEach((photo) => URL.revokeObjectURL(photo.url));
+    };
+  }, [photos]);
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -55,28 +62,29 @@ export default function PhotoSelector() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
-          AI Photo Selector
-        </h1>
+    <AppShell
+      title="AI Photo Selector"
+      description="Upload photos, score them quickly, and select your strongest set for your use case."
+      badge="Media"
+    >
+      <div className="mx-auto max-w-5xl">
 
         {/* Use Case Selection */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Select Use Case</h2>
-          <div className="flex space-x-4">
+        <div className="surface-strong mb-6 p-6">
+          <h2 className="mb-4 text-xl font-semibold">Select Use Case</h2>
+          <div className="flex flex-wrap gap-4">
             {[
               { value: 'business', label: 'Business (Resume, LinkedIn)' },
               { value: 'personal', label: 'Personal' },
               { value: 'dating', label: 'Dating (Shidduch)' },
             ].map(option => (
-              <label key={option.value} className="flex items-center">
+              <label key={option.value} className="surface flex cursor-pointer items-center gap-2 px-3 py-2 text-sm">
                 <input
                   type="radio"
                   value={option.value}
                   checked={useCase === option.value}
                   onChange={(e) => setUseCase(e.target.value as typeof useCase)}
-                  className="mr-2"
+                  className="accent-[color:var(--brand)]"
                 />
                 {option.label}
               </label>
@@ -85,9 +93,9 @@ export default function PhotoSelector() {
         </div>
 
         {/* Upload Section */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Upload Photos</h2>
-          <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 text-center">
+        <div className="surface-strong mb-6 p-6">
+          <h2 className="mb-4 text-xl font-semibold">Upload Photos</h2>
+          <div className="rounded-xl border-2 border-dashed border-black/20 p-8 text-center">
             <input
               type="file"
               multiple
@@ -97,7 +105,7 @@ export default function PhotoSelector() {
               id="photo-upload"
             />
             <label htmlFor="photo-upload" className="cursor-pointer">
-              <div className="text-gray-600 dark:text-gray-400">
+              <div className="muted">
                 <svg className="mx-auto h-12 w-12 mb-4" stroke="currentColor" fill="none" viewBox="0 0 48 48">
                   <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
@@ -110,31 +118,31 @@ export default function PhotoSelector() {
 
         {/* Analysis Status */}
         {isAnalyzing && (
-          <div className="bg-blue-50 dark:bg-blue-900 border border-blue-200 dark:border-blue-700 rounded-lg p-4 mb-6">
+          <div className="mb-6 rounded-xl border border-[color:var(--brand)]/35 bg-[color:var(--brand-soft)] p-4">
             <div className="flex items-center">
-              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 mr-3"></div>
-              <p className="text-blue-800 dark:text-blue-200">AI is analyzing your photos...</p>
+              <div className="mr-3 h-6 w-6 animate-spin rounded-full border-b-2 border-[color:var(--brand)]"></div>
+              <p>AI is analyzing your photos...</p>
             </div>
           </div>
         )}
 
         {/* Photo Grid */}
         {photos.length > 0 && (
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
+          <div className="surface-strong mb-6 p-6">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+              <h2 className="text-xl font-semibold">
                 Photos ({photos.length})
               </h2>
               <div className="space-x-2">
                 <button
                   onClick={selectBest}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
+                  className="rounded-xl bg-[color:var(--brand)] px-4 py-2 text-sm font-semibold text-white"
                 >
                   Select Best Photos
                 </button>
                 <button
                   onClick={downloadSelected}
-                  className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md"
+                  className="rounded-xl border border-black/10 bg-white/85 px-4 py-2 text-sm font-semibold"
                 >
                   Download Selected
                 </button>
@@ -145,7 +153,7 @@ export default function PhotoSelector() {
                 <div
                   key={photo.id}
                   className={`relative border-2 rounded-lg overflow-hidden cursor-pointer ${
-                    photo.selected ? 'border-blue-500' : 'border-gray-300 dark:border-gray-600'
+                    photo.selected ? 'border-[color:var(--brand)]' : 'border-black/15'
                   }`}
                   onClick={() => toggleSelect(photo.id)}
                 >
@@ -154,8 +162,8 @@ export default function PhotoSelector() {
                     {photo.score.toFixed(1)}%
                   </div>
                   {photo.selected && (
-                    <div className="absolute inset-0 bg-blue-500 bg-opacity-20 flex items-center justify-center">
-                      <svg className="w-8 h-8 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                    <div className="absolute inset-0 flex items-center justify-center bg-[color:var(--brand)]/20">
+                      <svg className="h-8 w-8 text-[color:var(--brand)]" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                       </svg>
                     </div>
@@ -168,16 +176,16 @@ export default function PhotoSelector() {
 
         {/* Parody J Swipe Card */}
         {useCase === 'dating' && (
-          <div className="bg-pink-50 dark:bg-pink-900 border border-pink-200 dark:border-pink-700 rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-pink-800 dark:text-pink-200 mb-2">
+          <div className="surface p-6">
+            <h3 className="mb-2 text-lg font-semibold">
               💕 Parody J Swipe Card 💕
             </h3>
-            <p className="text-pink-700 dark:text-pink-300">
+            <p className="muted">
               For fun: Imagine this as a dating app card. Swipe right if you like kosher sushi! 🐟
             </p>
           </div>
         )}
       </div>
-    </div>
+    </AppShell>
   );
 }

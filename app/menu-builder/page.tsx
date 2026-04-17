@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import AppShell from '../components/AppShell';
 
 interface MenuItem {
   id: string;
@@ -71,33 +72,36 @@ export default function MenuBuilder() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
-      <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">Restaurant Menu Builder</h1>
+    <AppShell
+      title="Restaurant Menu Builder"
+      description="Design menus, control screen sync, and keep availability accurate during service."
+      badge="Hospitality"
+    >
+      <div className="mx-auto max-w-7xl">
 
         {/* Controls */}
-        <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 mb-6">
+        <div className="surface-strong mb-6 p-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="mb-2 block text-sm font-medium">
                 Search Menu Items
               </label>
               <input
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                className="w-full rounded-xl border border-black/10 bg-white/85 px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--brand)]"
                 placeholder="Search items..."
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="mb-2 block text-sm font-medium">
                 Search Screens
               </label>
               <select
                 value={selectedScreen}
                 onChange={(e) => setSelectedScreen(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                className="w-full rounded-xl border border-black/10 bg-white/85 px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--brand)]"
               >
                 <option value="all">All Screens</option>
                 {screens.map(screen => (
@@ -106,27 +110,27 @@ export default function MenuBuilder() {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="mb-2 block text-sm font-medium">
                 Theme Color
               </label>
               <input
                 type="color"
                 value={themeColor}
                 onChange={(e) => setThemeColor(e.target.value)}
-                className="w-full h-10 border border-gray-300 rounded-md"
+                className="h-10 w-full rounded-xl border border-black/10"
               />
             </div>
           </div>
           <div className="mt-4 flex space-x-4">
             <button
               onClick={addItem}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
+              className="rounded-xl bg-[color:var(--brand)] px-4 py-2 text-sm font-semibold text-white transition hover:brightness-110"
             >
               Add Item
             </button>
             <button
               onClick={addCategory}
-              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md"
+              className="rounded-xl border border-black/10 bg-white/85 px-4 py-2 text-sm font-semibold"
             >
               Add Category
             </button>
@@ -134,13 +138,13 @@ export default function MenuBuilder() {
         </div>
 
         {/* Screens Dashboard */}
-        <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 mb-6">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Screen Dashboard</h2>
+        <div className="surface-strong mb-6 p-6">
+          <h2 className="mb-4 text-xl font-semibold">Screen Dashboard</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredScreens.map(screen => (
-              <div key={screen.id} className="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
+              <div key={screen.id} className="surface p-4">
                 <div className="flex justify-between items-center mb-2">
-                  <h3 className="font-medium text-gray-900 dark:text-white">{screen.name}</h3>
+                  <h3 className="font-medium">{screen.name}</h3>
                   <span className={`px-2 py-1 rounded-full text-xs ${
                     screen.status === 'connected' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
                   }`}>
@@ -151,14 +155,14 @@ export default function MenuBuilder() {
                   <button
                     onClick={() => toggleFreeze(screen.id)}
                     className={`px-3 py-1 rounded text-sm ${
-                      screen.frozen ? 'bg-red-600 text-white' : 'bg-gray-600 text-white'
+                      screen.frozen ? 'bg-red-600 text-white' : 'bg-black/70 text-white'
                     }`}
                   >
                     {screen.frozen ? 'Unfreeze' : 'Freeze'}
                   </button>
                   <button
                     onClick={() => pushToScreen(screen.id)}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm"
+                    className="rounded bg-[color:var(--brand)] px-3 py-1 text-sm text-white"
                   >
                     Push to Screen
                   </button>
@@ -169,19 +173,19 @@ export default function MenuBuilder() {
         </div>
 
         {/* Menu Items */}
-        <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Menu Items</h2>
+        <div className="surface-strong p-6">
+          <h2 className="mb-4 text-xl font-semibold">Menu Items</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredItems.map(item => (
-              <div key={item.id} className="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
+              <div key={item.id} className="surface p-4">
                 <div className="flex justify-between items-start mb-2">
                   <div>
-                    <h3 className="font-medium text-gray-900 dark:text-white">{item.name}</h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">{item.category}</p>
+                    <h3 className="font-medium">{item.name}</h3>
+                    <p className="muted text-sm">{item.category}</p>
                   </div>
-                  <span className="text-lg font-bold text-gray-900 dark:text-white">${item.price.toFixed(2)}</span>
+                  <span className="text-lg font-bold">${item.price.toFixed(2)}</span>
                 </div>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{item.description}</p>
+                <p className="muted mb-2 text-sm">{item.description}</p>
                 <div className="flex justify-between items-center">
                   <span className={`px-2 py-1 rounded-full text-xs ${
                     item.available ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
@@ -191,7 +195,7 @@ export default function MenuBuilder() {
                   {item.available && (
                     <button
                       onClick={() => eightySixItem(item.id)}
-                      className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm"
+                      className="rounded bg-red-600 px-3 py-1 text-sm text-white"
                     >
                       86 Item
                     </button>
@@ -202,6 +206,6 @@ export default function MenuBuilder() {
           </div>
         </div>
       </div>
-    </div>
+    </AppShell>
   );
 }
