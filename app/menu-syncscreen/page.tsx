@@ -17,6 +17,14 @@ export default function MenuSyncScreenPage() {
       badge="Restaurant"
     >
       <div className="surface-strong p-6">
+        <div className="mb-4">
+          <Link
+            href="/menu-syncscreen/editor"
+            className="inline-flex rounded-full bg-[color:var(--brand)] px-4 py-2 text-sm font-semibold text-white"
+          >
+            Open Menu Editor + Voice Control
+          </Link>
+        </div>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
           {screens.map((screen) => (
             <article key={`${screen.type}-${screen.number}`} className="surface p-4">
