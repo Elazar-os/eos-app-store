@@ -71,77 +71,30 @@ function ResumeSiteInner() {
     });
   };
 
-  const shareResume = (type: 'professional' | 'personal') => {
-    const url = `${window.location.origin}/resume-site?view=${type}&shared=true`;
-    navigator.clipboard.writeText(url);
-    alert(`Resume link copied: ${url}`);
+  const shareResume = async (type: 'professional' | 'personal') => {
+    try {
+      const response = await fetch('/api/generate-share-link', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ profileType: type })
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to generate share link');
+      }
+      
+      const data = await response.json();
+      navigator.clipboard.writeText(data.url);
+      
+      const expiryDate = new Date(data.expiresAt).toLocaleDateString();
+      alert(`Secure resume link copied! Expires on ${expiryDate}\n\n${data.url}`);
+    } catch (error) {
+      alert('Failed to generate secure link. Please try again.');
+    }
   };
 
-  return (
-    <AppShell
-      title="Resume Builder"
-      description="Craft a polished resume profile and quickly share professional or personal views."
-      badge="Career"
-      standalone={isShared}
-    >
-      <div className="mx-auto max-w-4xl">
-        {/* Header */}
-        <div className="surface-strong mb-6 p-6">
-          <div className="flex justify-between items-center mb-4">
-            <h1 className="text-3xl font-bold">Resume Builder</h1>
-            <button
-              onClick={() => setIsEditing(!isEditing)}
-              className="rounded-xl bg-[color:var(--brand)] px-4 py-2 text-sm font-semibold text-white"
-            >
-              {isEditing ? 'Save' : 'Edit'}
-            </button>
-          </div>
-
-          <div className="mb-4 flex flex-wrap gap-3">
-            <button
-              onClick={() => setViewMode('professional')}
-              className={`rounded-full px-4 py-2 text-sm font-medium ${
-                viewMode === 'professional' ? 'bg-[color:var(--brand)] text-white' : 'bg-white/80 text-black'
-              }`}
-            >
-              Professional
-            </button>
-            <button
-              onClick={() => setViewMode('personal')}
-              className={`rounded-full px-4 py-2 text-sm font-medium ${
-                viewMode === 'personal' ? 'bg-[color:var(--brand)] text-white' : 'bg-white/80 text-black'
-              }`}
-            >
-              Personal
-            </button>
-            <button
-              onClick={() => setViewMode('both')}
-              className={`rounded-full px-4 py-2 text-sm font-medium ${
-                viewMode === 'both' ? 'bg-[color:var(--brand)] text-white' : 'bg-white/80 text-black'
-              }`}
-            >
-              Both
-            </button>
-          </div>
-
-          <div className="flex flex-wrap gap-3">
-            <button
-              onClick={() => shareResume('professional')}
-              className="rounded-xl bg-[color:var(--brand)] px-4 py-2 text-sm font-semibold text-white"
-            >
-              Share Professional
-            </button>
-            <button
-              onClick={() => shareResume('personal')}
-              className="rounded-xl border border-black/10 bg-white/85 px-4 py-2 text-sm font-semibold"
-            >
-              Share Personal
-            </button>
-          </div>
-        </div>
-
-        {/* Resume Content */}
-        <div className="surface-strong p-8">
+  const resumeContent = (
+    <div className="surface-strong p-8">
           {/* Personal Info */}
           <div className="mb-8">
             <h2 className="mb-4 text-2xl font-bold">
@@ -268,16 +221,92 @@ function ResumeSiteInner() {
             </div>
           )}
 
-          {/* Personal Section */}
-          {(viewMode === 'personal' || viewMode === 'both') && (
-            <div>
-              <h3 className="mb-4 text-xl font-semibold">Personal</h3>
-              <p className="muted">
-                This section can include personal interests, hobbies, and other non-professional information.
-              </p>
-            </div>
-          )}
+      {/* Personal Section */}
+      {(viewMode === 'personal' || viewMode === 'both') && (
+        <div>
+          <h3 className="mb-4 text-xl font-semibold">Personal</h3>
+          <p className="muted">
+            This section can include personal interests, hobbies, and other non-professional information.
+          </p>
         </div>
+      )}
+    </div>
+  );
+
+  // Shared view: completely bare — no AppShell, no navigation, no links
+  if (isShared) {
+    return (
+      <div className="min-h-screen p-6">
+        <div className="mx-auto max-w-4xl">
+          {resumeContent}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <AppShell
+      title="Resume Builder"
+      description="Craft a polished resume profile and quickly share professional or personal views."
+      badge="Career"
+    >
+      <div className="mx-auto max-w-4xl">
+        {/* Header controls */}
+        <div className="surface-strong mb-6 p-6">
+          <div className="flex justify-between items-center mb-4">
+            <h1 className="text-3xl font-bold">Resume Builder</h1>
+            <button
+              onClick={() => setIsEditing(!isEditing)}
+              className="rounded-xl bg-[color:var(--brand)] px-4 py-2 text-sm font-semibold text-white"
+            >
+              {isEditing ? 'Save' : 'Edit'}
+            </button>
+          </div>
+
+          <div className="mb-4 flex flex-wrap gap-3">
+            <button
+              onClick={() => setViewMode('professional')}
+              className={`rounded-full px-4 py-2 text-sm font-medium ${
+                viewMode === 'professional' ? 'bg-[color:var(--brand)] text-white' : 'bg-white/80 text-black'
+              }`}
+            >
+              Professional
+            </button>
+            <button
+              onClick={() => setViewMode('personal')}
+              className={`rounded-full px-4 py-2 text-sm font-medium ${
+                viewMode === 'personal' ? 'bg-[color:var(--brand)] text-white' : 'bg-white/80 text-black'
+              }`}
+            >
+              Personal
+            </button>
+            <button
+              onClick={() => setViewMode('both')}
+              className={`rounded-full px-4 py-2 text-sm font-medium ${
+                viewMode === 'both' ? 'bg-[color:var(--brand)] text-white' : 'bg-white/80 text-black'
+              }`}
+            >
+              Both
+            </button>
+          </div>
+
+          <div className="flex flex-wrap gap-3">
+            <button
+              onClick={() => shareResume('professional')}
+              className="rounded-xl bg-[color:var(--brand)] px-4 py-2 text-sm font-semibold text-white"
+            >
+              Share Professional
+            </button>
+            <button
+              onClick={() => shareResume('personal')}
+              className="rounded-xl border border-black/10 bg-white/85 px-4 py-2 text-sm font-semibold"
+            >
+              Share Personal
+            </button>
+          </div>
+        </div>
+
+        {resumeContent}
       </div>
     </AppShell>
   );
