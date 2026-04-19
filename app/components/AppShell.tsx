@@ -6,9 +6,10 @@ type AppShellProps = {
   description: string
   children: ReactNode
   badge?: string
+  standalone?: boolean
 }
 
-export default function AppShell({ title, description, children, badge = 'EOS Suite' }: AppShellProps) {
+export default function AppShell({ title, description, children, badge = 'EOS Suite', standalone = false }: AppShellProps) {
   return (
     <div className="app-shell reveal">
       <header className="surface app-shell-header">
@@ -18,12 +19,14 @@ export default function AppShell({ title, description, children, badge = 'EOS Su
             <h1 className="mt-3 text-3xl font-semibold tracking-tight">{title}</h1>
             <p className="muted mt-2 max-w-3xl text-sm sm:text-base">{description}</p>
           </div>
-          <Link
-            href="/"
-            className="rounded-full border border-black/10 bg-white/70 px-4 py-2 text-sm font-medium hover:bg-white"
-          >
-            Back to App Store
-          </Link>
+          {!standalone && (
+            <Link
+              href="/"
+              className="rounded-full border border-black/10 bg-white/70 px-4 py-2 text-sm font-medium hover:bg-white"
+            >
+              Back to App Store
+            </Link>
+          )}
         </div>
       </header>
       <main className="app-shell-content">{children}</main>

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import AppShell from '../components/AppShell';
 
 interface ResumeData {
@@ -29,6 +30,8 @@ interface ResumeData {
 }
 
 export default function ResumeSite() {
+  const searchParams = useSearchParams();
+  const isShared = searchParams.get('shared') === 'true';
   const [resumeData, setResumeData] = useState<ResumeData>({
     personal: {
       name: 'Elazar',
@@ -69,7 +72,7 @@ export default function ResumeSite() {
   };
 
   const shareResume = (type: 'professional' | 'personal') => {
-    const url = `${window.location.origin}/resume-site?view=${type}`;
+    const url = `${window.location.origin}/resume-site?view=${type}&shared=true`;
     navigator.clipboard.writeText(url);
     alert(`Resume link copied: ${url}`);
   };
@@ -79,6 +82,7 @@ export default function ResumeSite() {
       title="Resume Builder"
       description="Craft a polished resume profile and quickly share professional or personal views."
       badge="Career"
+      standalone={isShared}
     >
       <div className="mx-auto max-w-4xl">
         {/* Header */}
