@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import AppShell from '../components/AppShell';
 
@@ -29,7 +29,7 @@ interface ResumeData {
   skills: string[];
 }
 
-export default function ResumeSite() {
+function ResumeSiteInner() {
   const searchParams = useSearchParams();
   const isShared = searchParams.get('shared') === 'true';
   const [resumeData, setResumeData] = useState<ResumeData>({
@@ -280,5 +280,13 @@ export default function ResumeSite() {
         </div>
       </div>
     </AppShell>
+  );
+}
+
+export default function ResumeSite() {
+  return (
+    <Suspense>
+      <ResumeSiteInner />
+    </Suspense>
   );
 }
