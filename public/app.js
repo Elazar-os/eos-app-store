@@ -135,7 +135,7 @@ async function fetchMenu() {
   }
 
   try {
-    var r = await fetchWithTimeout('/menu-' + ST + '-' + SN + '.json', 5000);
+    var r = await fetchWithTimeout('/api/menu?screentype=' + ST + '&screennumber=' + SN, 5000);
     if (!r.ok) throw new Error('HTTP ' + r.status);
     var j = await r.json();
     if (!j.success) throw new Error(j.error || 'API error');
@@ -144,6 +144,17 @@ async function fetchMenu() {
     return j.data;
   } catch (e) {
     console.error('Fetch error:', e);
+    try {
+      var fallback = await fetchWithTimeout('/menu-' + ST + '-' + SN + '.json', 5000);
+      if (fallback.ok) {
+        var fallbackJson = await fallback.json();
+        var fallbackData = fallbackJson.data || fallbackJson;
+        cacheMenu(fallbackData);
+        showCachedIndicator(true);
+        return fallbackData;
+      }
+    } catch (_) {}
+
     var cached = getCachedMenu(true);
     if (cached) { showCachedIndicator(true); return cached; }
     return [];
