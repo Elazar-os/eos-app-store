@@ -19,6 +19,14 @@ export default function Home() {
       tone: "from-sky-500 to-cyan-700",
     },
     {
+      title: "Menu SyncScreen",
+      description: "TV-ready digital menu display routes imported from Replit.",
+      link: "/menu-syncscreen",
+      label: "Restaurant",
+      glyph: "MS",
+      tone: "from-red-500 to-orange-700",
+    },
+    {
       title: "Photo Selector",
       description: "AI-powered photo selection for business and personal use.",
       link: "/photo-selector",
