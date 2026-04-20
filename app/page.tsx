@@ -7,114 +7,184 @@ export default function Home() {
       description: "Create custom chatbots for businesses and hobbyists with API integration.",
       link: "/chatbot-builder",
       label: "AI",
-      glyph: "CB",
-      tone: "from-amber-500 to-rose-600",
+      icon: "🤖",
+      status: "active",
     },
     {
       title: "Restaurant Menu Builder",
       description: "Build and manage restaurant menus with voice control and screen management.",
       link: "/menu-builder",
       label: "Hospitality",
-      glyph: "MB",
-      tone: "from-sky-500 to-cyan-700",
+      icon: "🍽️",
+      status: "active",
     },
-
     {
       title: "Photo Selector",
       description: "AI-powered photo selection for business and personal use.",
       link: "/photo-selector",
       label: "Media",
-      glyph: "PS",
-      tone: "from-violet-500 to-fuchsia-700",
+      icon: "📸",
+      status: "active",
     },
     {
       title: "Kosher Android Launcher",
       description: "Secure launcher for approved apps on kosher smartphones.",
       link: "/kosher-launcher",
       label: "Mobile",
-      glyph: "KL",
-      tone: "from-emerald-500 to-teal-700",
+      icon: "📱",
+      status: "beta",
     },
     {
       title: "Community App for Shuls",
       description: "Connect with communities, zmanim, and shiurim.",
       link: "/shul-community",
       label: "Community",
-      glyph: "SC",
-      tone: "from-orange-500 to-red-700",
+      icon: "🕍",
+      status: "active",
     },
     {
       title: "Resume Site",
-      description: "Professional resume builder and sharing platform.",
+      description: "Professional resume builder and sharing platform with secure 30-day expiring links.",
       link: "/resume-site",
       label: "Career",
-      glyph: "RS",
-      tone: "from-indigo-500 to-blue-700",
+      icon: "📄",
+      status: "active",
     },
     {
       title: "Admin Dashboard",
       description: "View and manage chatbot and shul submissions in one place.",
       link: "/dashboard",
       label: "Ops",
-      glyph: "AD",
-      tone: "from-slate-500 to-slate-700",
+      icon: "⚙️",
+      status: "active",
     },
   ];
 
   return (
-    <div className="app-shell reveal">
-      <header className="surface app-shell-header">
-        <div className="grid gap-4 sm:grid-cols-[1fr_auto] sm:items-end">
-          <div>
-            <span className="brand-chip">EOS Platform</span>
-            <h1 className="mt-3 text-4xl font-semibold tracking-tight">Elazar&apos;s Operating System</h1>
-            <p className="muted mt-3 max-w-2xl text-sm sm:text-base">
-              A curated suite of practical apps for community, productivity, and business workflows.
-            </p>
+    <div className="min-h-screen bg-slate-950 text-white">
+      {/* Header */}
+      <header className="border-b border-blue-500/20 bg-slate-900/50 backdrop-blur-xl">
+        <div className="mx-auto max-w-7xl px-6 py-8">
+          <div className="flex items-center gap-4">
+            {/* EOS Logo */}
+            <div className="relative">
+              <div className="absolute inset-0 animate-pulse rounded-2xl bg-blue-500/20 blur-xl"></div>
+              <div className="relative flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-500 shadow-lg shadow-blue-500/50">
+                <span className="text-2xl font-black tracking-tighter text-white">EOS</span>
+              </div>
+            </div>
+            
+            <div>
+              <h1 className="text-3xl font-bold tracking-tight">
+                Elazar&apos;s <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">Operating System</span>
+              </h1>
+              <p className="mt-1 text-sm text-slate-400">
+                A curated suite of practical apps for community, productivity, and business workflows.
+              </p>
+            </div>
           </div>
-          <div className="surface px-4 py-3 text-sm">
-            <p className="font-semibold">Live apps</p>
-            <p className="muted">{apps.length} routes ready to use</p>
+          
+          {/* Stats Bar */}
+          <div className="mt-6 flex gap-6 text-sm">
+            <div className="flex items-center gap-2">
+              <div className="h-2 w-2 animate-pulse rounded-full bg-green-400"></div>
+              <span className="text-slate-400">System Online</span>
+            </div>
+            <div className="text-slate-400">
+              <span className="font-semibold text-blue-400">{apps.length}</span> Apps Deployed
+            </div>
+            <div className="text-slate-400">
+              <span className="font-semibold text-cyan-400">{apps.filter(a => a.status === 'active').length}</span> Active
+            </div>
           </div>
         </div>
       </header>
 
-      <main className="app-shell-content">
-        <section className="surface-strong p-5 sm:p-6">
-          <h2 className="text-xl font-semibold tracking-tight sm:text-2xl">Application Catalog</h2>
-          <p className="muted mt-2 text-sm">Choose an app and continue shipping.</p>
-          <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {apps.map((app) => (
-              <AppCard key={app.link} {...app} />
-            ))}
-          </div>
-        </section>
+      {/* Main Content */}
+      <main className="mx-auto max-w-7xl px-6 py-12">
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold">Application Catalog</h2>
+          <p className="mt-2 text-slate-400">Select an application to launch</p>
+        </div>
+
+        {/* App Grid */}
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {apps.map((app) => (
+            <AppCard key={app.link} {...app} />
+          ))}
+        </div>
       </main>
+
+      {/* Footer */}
+      <footer className="mt-20 border-t border-blue-500/20 bg-slate-900/50 py-8 text-center text-sm text-slate-500">
+        <p>© 2025 Elazar Greisman. All rights reserved.</p>
+      </footer>
     </div>
   );
 }
 
-function AppCard({ title, description, link, label, glyph, tone }: { title: string; description: string; link: string; label: string; glyph: string; tone: string }) {
+function AppCard({ 
+  title, 
+  description, 
+  link, 
+  label, 
+  icon, 
+  status 
+}: { 
+  title: string; 
+  description: string; 
+  link: string; 
+  label: string; 
+  icon: string;
+  status: string;
+}) {
   return (
-    <article className="surface p-5 transition hover:-translate-y-0.5 hover:shadow-xl">
-      <div className="flex items-start justify-between gap-3">
-        <div className={`h-10 w-10 rounded-full bg-gradient-to-br ${tone} text-center text-[13px] font-extrabold leading-10 tracking-wide text-white shadow-sm`}>
-          {glyph}
+    <Link href={link}>
+      <article className="group relative overflow-hidden rounded-2xl border border-blue-500/20 bg-slate-900/50 p-6 backdrop-blur-sm transition-all duration-300 hover:border-blue-500/50 hover:shadow-lg hover:shadow-blue-500/20 hover:-translate-y-1">
+        {/* Glow effect on hover */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/0 to-cyan-500/0 opacity-0 transition-opacity duration-300 group-hover:opacity-10"></div>
+        
+        <div className="relative">
+          {/* Header */}
+          <div className="flex items-start justify-between">
+            <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 text-3xl shadow-inner">
+              {icon}
+            </div>
+            <div className="flex flex-col items-end gap-2">
+              <span className="rounded-full bg-blue-500/10 px-3 py-1 text-xs font-medium text-blue-400 ring-1 ring-blue-500/20">
+                {label}
+              </span>
+              {status === 'beta' && (
+                <span className="rounded-full bg-amber-500/10 px-3 py-1 text-xs font-medium text-amber-400 ring-1 ring-amber-500/20">
+                  Beta
+                </span>
+              )}
+              {status === 'active' && (
+                <div className="flex items-center gap-1.5">
+                  <div className="h-1.5 w-1.5 rounded-full bg-green-400"></div>
+                  <span className="text-xs text-green-400">Active</span>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Content */}
+          <div className="mt-4">
+            <h3 className="text-lg font-semibold text-white">{title}</h3>
+            <p className="mt-2 text-sm leading-relaxed text-slate-400">{description}</p>
+          </div>
+
+          {/* Launch Button */}
+          <div className="mt-6">
+            <div className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-blue-500 to-cyan-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-blue-500/30 transition-all duration-300 group-hover:shadow-blue-500/50 group-hover:scale-105">
+              Launch App
+              <svg className="h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </div>
+          </div>
         </div>
-        <span className="brand-chip">{label}</span>
-      </div>
-      <div className="mt-4">
-        <h3 className="text-lg font-semibold tracking-tight">{title}</h3>
-        <p className="muted mt-2 text-sm leading-relaxed">{description}</p>
-      </div>
-      <div className="mt-6">
-        <Link
-          href={link}
-          className="inline-flex items-center rounded-full bg-[color:var(--brand)] px-4 py-2 text-sm font-semibold text-white transition hover:brightness-110"
-        >
-          Launch App
-        </Link>
-      </div>
-    </article>
+      </article>
+    </Link>
   );
 }
