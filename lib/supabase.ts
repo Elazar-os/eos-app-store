@@ -8,6 +8,9 @@ export const supabase = createClient(
   supabaseAnonKey ?? 'placeholder'
 )
 
+// Export createClient function for API routes
+export { createClient }
+
 // Database types (you can generate these with `supabase gen types typescript --project-id YOUR_PROJECT_ID`)
 export type Database = {
   public: {

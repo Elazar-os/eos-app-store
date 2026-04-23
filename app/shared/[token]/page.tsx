@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { createClient } from '@/lib/supabase';
+import { supabase } from '@/lib/supabase';
 
 interface SharedLinkData {
   profile_type: string;
@@ -44,8 +44,6 @@ export default function SharedProfile({ params }: { params: { token: string } })
   useEffect(() => {
     async function validateAndLoadProfile() {
       try {
-        const supabase = createClient();
-        
         // Validate shared link
         const { data: linkData, error: linkError } = await supabase
           .from('shared_links')

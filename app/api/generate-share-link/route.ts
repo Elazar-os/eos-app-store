@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase';
+import { supabase } from '@/lib/supabase';
 import { nanoid } from 'nanoid';
 
 export async function POST(request: NextRequest) {
@@ -8,14 +8,6 @@ export async function POST(request: NextRequest) {
     
     if (!profileType || !['professional', 'personal', 'both'].includes(profileType)) {
       return NextResponse.json({ error: 'Invalid profile type' }, { status: 400 });
-    }
-
-    const supabase = createClient();
-    
-    // Get current user
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
-    if (authError || !user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Generate secure token
@@ -31,7 +23,7 @@ export async function POST(request: NextRequest) {
       .insert({
         token,
         profile_type: profileType,
-        user_id: user.id,
+        user_id: '00000000-0000-0000-0000-000000000000', // Placeholder since we don't have auth yet
         expires_at: expiresAt.toISOString()
       })
       .select()
